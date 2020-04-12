@@ -9,8 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pigpio.h>
-#include <signal.h>
 
 #define BASE_DIR "/sys/bus/w1/devices/"
 #define PIN_ADDRESS "28-00000adb99e5"
@@ -19,9 +17,6 @@
 
 void run_thermostat(int);
 void extract_temp(char *, char *);
-void run_led_controller(void);
-void handle_led_request(int);
-void handle_sigterm();
 
 int main(int argc, char **argv)
 {
@@ -31,47 +26,7 @@ int main(int argc, char **argv)
   if (argc > 1) {
     debug = atoi(argv[1]); 
   }
-  if (argc > 2) {
-    led_controller = atoi(argv[2]);
-    if (led_controller)
-    {
-      run_led_controller();
-    }
-  }
   run_thermostat(debug);
-  exit(EXIT_SUCCESS);
-}
-
-void run_led_controller() {
-  if (gpioInitialise() < 0)
-  {
-    printf("fail");
-    exit(EXIT_FAILURE);
-  }
-  gpioSetMode(14, PI_OUTPUT);
- // create signal handlers
-  signal(SIGINT, handle_led_request);
-  signal(SIGTERM, handle_sigterm);
-  // run until SIGTERM
-  while (1)
-  {
-    ;
-  } 
-}
-
-void handle_led_request(int sig) {
-  gpioWrite(14, 1);
-  time_sleep(0.5);
-  gpioWrite(14, 0);
-  // reset signal
-  signal(SIGINT, handle_led_request);
-}
-
-void handle_sigterm() {
-  // stop all led handling
-  signal(SIGINT, SIG_DFL);
-  gpioWrite(14, 0);
-  gpioTerminate();
   exit(EXIT_SUCCESS);
 }
 

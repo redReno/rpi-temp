@@ -1,18 +1,10 @@
-# rpi-temp
-Small C application that uses a RPi and ds18b20 to measure the temperature.
-The temperature is in Celcius, with two digits.
+# Raspberry thermometer project
+A collection of C programs used to measure the temperature
+and otherwise controlling a RPi3. They are made to be used
+in a NodeJS web server.
 
-# To run
-cd temperature_sensor_c
-gcc -Wall -pthread -o rpi_temp.out thermostat.c -lpigpio -lrt
-sudo chown root:root rpi_temp.out
-sudo chmod 4755 rpi_temp.out
+# rpi_temp
+Used to measure the temperature in degrees Celcius.
 
-./rpi-temp.out (this runs the program once, and can be repeated)
-
-There are two possible parameters (sequential):
-debug (1 or 0) 
-  - 1 if you want explanatory logs. Default 0.
-led_controller (1 or 0)
-  - 1 if you want to control a LED using SIGINT calls. Default 0.
-    The led should get its power from GPIO14.
+# led_controller
+Used to make a LED lamp blink once.
